@@ -9,8 +9,32 @@ class Producto{
 }
 
 
-// Armo un array vacío para guardar los productos
-let carrito = [];
+
+let carrito;
+
+if(JSON.parse(localStorage.getItem('carrito')).length === 0){
+  //Si el carrito está vacío en local storage que devuelva el carrito vacío
+  carrito = [];
+} else {
+  //De lo contrario que nos devuelva el carrito con los productos que tiene(devuelve en consola)
+  carrito = JSON.parse(localStorage.getItem('carrito'))
+}
+
+//Obtener el carrito del local storage, por más que recarguemos la página
+carrito.forEach(product => {
+  let productCard = document.createElement('li');
+    productCard.innerHTML = `
+    <div id=${product.id} class="w-50 my-3">
+        <div class="card-body">
+            <h5 class="card-title">${product.nombre}</h5>
+            <p class="card-text">${product.precio}</p>
+            <a href="#" class="btn btn-primary">Eliminar Producto</a>
+        </div>
+    </div>
+    `;
+    let carritoContainer = document.querySelector('#carrito-container')
+    carritoContainer.appendChild(productCard);
+})
 
 
 //! Instanciamos la clase Producto en un nuevo array
@@ -64,5 +88,8 @@ function addProduct(event){
     `;
     let carritoContainer = document.querySelector('#carrito-container')
     carritoContainer.appendChild(productCard);
+
+    //Guardo el carrito a Local Storage para que no se me eliminen los datos
+    localStorage.setItem('carrito', JSON.stringify(carrito));
 }
 
